@@ -26,7 +26,7 @@ FACTORS = {
 
 st.markdown("""
 <style>
-.block-container {padding-top:1.25rem; padding-bottom:2rem; max-width:1450px;}
+.block-container {padding-top:2rem; padding-bottom:2rem; max-width:1450px;}
 [data-testid="stSidebar"] {min-width:285px; max-width:285px;}
 .hero,.card,.approval {border:1px solid rgba(128,128,128,.25);border-radius:14px;padding:16px 18px;}
 .hero {margin:7px 0 16px}.hero-title{font-size:1.35rem;font-weight:750;margin:4px 0}
@@ -36,6 +36,7 @@ font-size:1.65rem;font-weight:800}
 .card{min-height:105px}.card-value{font-size:1.05rem;font-weight:700;margin:5px 0}
 .timeline{border-left:3px solid rgba(128,128,128,.42);padding:4px 0 13px 14px;margin-left:7px}
 .timeline-time{font-size:.76rem;opacity:.65}.timeline-text{font-weight:600}
+[data-testid="stInformation"] {margin-top:2rem !important;}
 </style>""", unsafe_allow_html=True)
 
 def esc(x): return html.escape(str(x))
