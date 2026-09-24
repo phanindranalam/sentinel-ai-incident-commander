@@ -34,6 +34,7 @@ TRIAGE
   → FORM_HYPOTHESES
   → SCORE_AND_GATE
   → RESPOND
+```
 
 The observed result is compared with the expected ACT, ASK, or ABSTAIN decision.
 
