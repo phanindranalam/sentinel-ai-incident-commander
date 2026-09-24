@@ -101,14 +101,14 @@ if "last_state" not in st.session_state:
     st.info("Incident loaded. Click **🔍 Investigate Incident** to begin evidence-gated analysis.")
     st.stop()
 
-state=st.session_state["last_state"]; response=state["response"]
-decision=response["decision"]; score=float(response["evidence_score"])
-hyp=response["leading_hypothesis"].replace("_"," ").title().replace("Cpu", "CPU")
-
 st.markdown("# Sentinel AI")
 st.markdown("### Evidence-Gated Incident Commander")
 st.markdown("**Know when to ACT. Know when to ASK. Know when to ABSTAIN.**")
-st.markdown("*AI-powered production incident investigation with evidence-gated autonomy and human-in-the-loop safety.*")
+st.markdown("*Stateful production incident investigation with evidence-gated autonomy and human-in-the-loop safety.*")
+
+state=st.session_state["last_state"]; response=state["response"]
+decision=response["decision"]; score=float(response["evidence_score"])
+hyp=response["leading_hypothesis"].replace("_"," ").title().replace("Cpu", "CPU")
 
 a,b=st.columns([4.2,1.1])
 with a:
