@@ -1,0 +1,388 @@
+[
+  {
+    "scenario_id": "act-cpu-saturation",
+    "incident": {
+      "incident_id": "INC-ACT-001",
+      "cluster": "prod-us-east",
+      "namespace": "checkout",
+      "service_name": "checkout-api",
+      "alert": "Elevated checkout latency"
+    },
+    "symptoms": [
+      "cpu",
+      "latency",
+      "saturation"
+    ],
+    "metric_queries": [
+      "cpu",
+      "latency",
+      "error_rate"
+    ],
+    "log_queries": [
+      "error"
+    ],
+    "metrics": {
+      "cpu": {
+        "current_value": 0.93,
+        "baseline_value": 0.52,
+        "severity": "critical",
+        "samples": [
+          {
+            "timestamp": "2026-09-12T14:02:00Z",
+            "value": 0.7
+          },
+          {
+            "timestamp": "2026-09-12T14:06:00Z",
+            "value": 0.93
+          }
+        ]
+      },
+      "latency": {
+        "current_value": 820,
+        "baseline_value": 180,
+        "severity": "warning",
+        "samples": []
+      },
+      "error_rate": {
+        "current_value": 0.004,
+        "baseline_value": 0.003,
+        "severity": "normal",
+        "samples": []
+      }
+    },
+    "metrics_summary": {
+      "degraded": true,
+      "resource_pressure": true,
+      "incident_after_deployment": false
+    },
+    "logs": {
+      "results": []
+    },
+    "log_summary": {
+      "matching_error": false,
+      "matches_change": false
+    },
+    "deployments": [],
+    "runbooks": [
+      {
+        "runbook_id": "RB-CPU-01",
+        "title": "CPU saturation investigation",
+        "keywords": [
+          "cpu",
+          "latency",
+          "saturation"
+        ],
+        "relevance_score": 0.81,
+        "recommended_action": "continue_read_only_investigation",
+        "requires_human_approval": false
+      }
+    ],
+    "hypotheses": [
+      {
+        "name": "cpu_saturation",
+        "supporting_evidence": [
+          "CPU 93%",
+          "Latency elevated",
+          "No recent deployment"
+        ],
+        "contradicting_evidence": [],
+        "rank_score": 0.76
+      },
+      {
+        "name": "deployment_regression",
+        "supporting_evidence": [],
+        "contradicting_evidence": [
+          "No deployment in investigation window"
+        ],
+        "rank_score": 0.18
+      }
+    ],
+    "factor_overrides": {
+      "temporal_correlation": 0.2,
+      "signal_agreement": 0.75,
+      "causal_plausibility": 0.7,
+      "tool_completeness": 1.0,
+      "evidence_freshness": 0.95,
+      "runbook_support": 0.8
+    },
+    "proposed_action": "inspect_cpu_trend_and_restart_metrics",
+    "action_type": "READ_ONLY",
+    "conflicting_evidence": false,
+    "expected": {
+      "decision": "ACT",
+      "score_min": 0.6,
+      "score_max": 0.79
+    }
+  },
+  {
+    "scenario_id": "ask-bad-deployment",
+    "incident": {
+      "incident_id": "INC-ASK-001",
+      "cluster": "prod-us-east",
+      "namespace": "payments",
+      "service_name": "payments-api",
+      "alert": "Payments 5xx error spike"
+    },
+    "symptoms": [
+      "error",
+      "500",
+      "deployment"
+    ],
+    "metric_queries": [
+      "error_rate",
+      "latency"
+    ],
+    "log_queries": [
+      "nullpointerexception",
+      "error"
+    ],
+    "metrics": {
+      "error_rate": {
+        "current_value": 0.167,
+        "baseline_value": 0.004,
+        "severity": "critical",
+        "samples": [
+          {
+            "timestamp": "2026-09-12T14:02:00Z",
+            "value": 0.005
+          },
+          {
+            "timestamp": "2026-09-12T14:04:00Z",
+            "value": 0.082
+          },
+          {
+            "timestamp": "2026-09-12T14:06:00Z",
+            "value": 0.167
+          }
+        ]
+      },
+      "latency": {
+        "current_value": 920,
+        "baseline_value": 210,
+        "severity": "critical",
+        "samples": []
+      }
+    },
+    "metrics_summary": {
+      "degraded": true,
+      "resource_pressure": false,
+      "incident_after_deployment": true
+    },
+    "logs": {
+      "results": [
+        {
+          "timestamp": "2026-09-12T14:04:21Z",
+          "severity": "ERROR",
+          "message": "NullPointerException in PaymentHandler"
+        }
+      ]
+    },
+    "log_summary": {
+      "matching_error": true,
+      "matches_change": true
+    },
+    "deployments": [
+      {
+        "version": "payments-v2.4.0",
+        "previous_version": "payments-v2.3.8",
+        "deployed_at": "2026-09-12T14:02:10Z",
+        "deployed_by": "ci-pipeline",
+        "change_summary": "Updated PaymentHandler",
+        "rollback_available": true,
+        "recent": true
+      }
+    ],
+    "deployment_summary": {
+      "version": "payments-v2.4.0",
+      "previous_version": "payments-v2.3.8",
+      "deployed_at": "2026-09-12T14:02:10Z",
+      "change_summary": "Updated PaymentHandler",
+      "rollback_available": true,
+      "recent": true
+    },
+    "runbooks": [
+      {
+        "runbook_id": "RB-017",
+        "title": "Post-deployment 5xx spike",
+        "keywords": [
+          "error",
+          "500",
+          "deployment",
+          "rollback"
+        ],
+        "relevance_score": 0.92,
+        "pre_conditions": [
+          "error increase follows deployment",
+          "previous release was healthy"
+        ],
+        "recommended_action": "rollback",
+        "requires_human_approval": true
+      }
+    ],
+    "hypotheses": [
+      {
+        "name": "deployment_regression",
+        "supporting_evidence": [
+          "v2.4 deployed at 14:02",
+          "Error spike starts at 14:04",
+          "PaymentHandler exception matches change"
+        ],
+        "contradicting_evidence": [],
+        "rank_score": 0.93
+      },
+      {
+        "name": "downstream_dependency",
+        "supporting_evidence": [],
+        "contradicting_evidence": [
+          "No dependency-error signatures"
+        ],
+        "rank_score": 0.12
+      }
+    ],
+    "factor_overrides": {
+      "temporal_correlation": 1.0,
+      "signal_agreement": 1.0,
+      "causal_plausibility": 0.95,
+      "tool_completeness": 1.0,
+      "evidence_freshness": 1.0,
+      "runbook_support": 0.92
+    },
+    "proposed_action": "rollback",
+    "action_type": "PROD_WRITE",
+    "conflicting_evidence": false,
+    "expected": {
+      "decision": "ASK",
+      "score_min": 0.8,
+      "score_max": 1.0
+    }
+  },
+  {
+    "scenario_id": "abstain-insufficient-evidence",
+    "incident": {
+      "incident_id": "INC-ABS-001",
+      "cluster": "prod-us-east",
+      "namespace": "catalog",
+      "service_name": "catalog-api",
+      "alert": "Service degradation"
+    },
+    "symptoms": [
+      "cpu",
+      "degradation"
+    ],
+    "metric_queries": [
+      "cpu",
+      "latency",
+      "error_rate"
+    ],
+    "log_queries": [
+      "error"
+    ],
+    "metrics": {
+      "cpu": {
+        "current_value": 0.84,
+        "baseline_value": 0.55,
+        "severity": "warning",
+        "samples": []
+      },
+      "latency": {
+        "current_value": 180,
+        "baseline_value": 170,
+        "severity": "normal",
+        "samples": []
+      },
+      "error_rate": {
+        "current_value": 0.006,
+        "baseline_value": 0.005,
+        "severity": "normal",
+        "samples": []
+      }
+    },
+    "metrics_summary": {
+      "degraded": false,
+      "resource_pressure": true,
+      "incident_after_deployment": false
+    },
+    "logs": {
+      "results": []
+    },
+    "log_summary": {
+      "matching_error": false,
+      "matches_change": false
+    },
+    "deployments": [],
+    "runbooks": [
+      {
+        "runbook_id": "RB-CPU-02",
+        "title": "CPU contention",
+        "keywords": [
+          "cpu",
+          "degradation"
+        ],
+        "relevance_score": 0.41,
+        "recommended_action": "investigate",
+        "requires_human_approval": false
+      },
+      {
+        "runbook_id": "RB-DEP-02",
+        "title": "Dependency degradation",
+        "keywords": [
+          "degradation"
+        ],
+        "relevance_score": 0.37,
+        "recommended_action": "investigate",
+        "requires_human_approval": false
+      }
+    ],
+    "failures": {
+      "logs": [
+        "timeout",
+        "timeout"
+      ]
+    },
+    "hypotheses": [
+      {
+        "name": "cpu_contention",
+        "supporting_evidence": [
+          "CPU elevated"
+        ],
+        "contradicting_evidence": [
+          "Latency normal",
+          "Error rate normal"
+        ],
+        "rank_score": 0.42
+      },
+      {
+        "name": "downstream_issue",
+        "supporting_evidence": [],
+        "contradicting_evidence": [
+          "No live log evidence"
+        ],
+        "rank_score": 0.31
+      },
+      {
+        "name": "workload_anomaly",
+        "supporting_evidence": [
+          "CPU elevated"
+        ],
+        "contradicting_evidence": [],
+        "rank_score": 0.27
+      }
+    ],
+    "factor_overrides": {
+      "temporal_correlation": 0.1,
+      "signal_agreement": 0.3,
+      "causal_plausibility": 0.3,
+      "tool_completeness": 0.7,
+      "evidence_freshness": 0.9,
+      "runbook_support": 0.4
+    },
+    "proposed_action": "escalate_to_on_call",
+    "action_type": "READ_ONLY",
+    "conflicting_evidence": true,
+    "expected": {
+      "decision": "ABSTAIN",
+      "score_min": 0.0,
+      "score_max": 0.59
+    }
+  }
+]
