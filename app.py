@@ -104,10 +104,10 @@ state=st.session_state["last_state"]; response=state["response"]
 decision=response["decision"]; score=float(response["evidence_score"])
 hyp=response["leading_hypothesis"].replace("_"," ").title().replace("Cpu", "CPU")
 
-st.title("Sentinel AI")
+st.markdown("# Sentinel AI")
 st.markdown("### Evidence-Gated Incident Commander")
-st.caption("Know when to ACT. Know when to ASK. Know when to ABSTAIN.")
-st.caption("AI-powered production incident investigation with evidence-gated autonomy and human-in-the-loop safety.")
+st.markdown("**Know when to ACT. Know when to ASK. Know when to ABSTAIN.**")
+st.markdown("*AI-powered production incident investigation with evidence-gated autonomy and human-in-the-loop safety.*")
 
 a,b=st.columns([4.2,1.1])
 with a:
