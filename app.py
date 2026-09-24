@@ -97,14 +97,17 @@ if investigate:
         st.session_state["last_state"] = run_fixture(fixture)
         status.update(label="Investigation complete", state="complete", expanded=False)
 
-if "last_state" not in st.session_state:
-    st.info("Incident loaded. Click **🔍 Investigate Incident** to begin evidence-gated analysis.")
-    st.stop()
-
 st.markdown("# Sentinel AI")
 st.markdown("### Evidence-Gated Incident Commander")
 st.markdown("**Know when to ACT. Know when to ASK. Know when to ABSTAIN.**")
-st.markdown("*Stateful production incident investigation with evidence-gated autonomy and human-in-the-loop safety.*")
+st.markdown(
+    "*Stateful production incident investigation with evidence-gated "
+    "autonomy and human-in-the-loop safety.*"
+)
+
+if "last_state" not in st.session_state:
+    st.info("Incident loaded. Click **🔍 Investigate Incident** to begin evidence-gated analysis.")
+    st.stop()
 
 state=st.session_state["last_state"]; response=state["response"]
 decision=response["decision"]; score=float(response["evidence_score"])
@@ -194,4 +197,3 @@ with right:
 
 if state.get("evidence_penalties"):
     st.divider(); st.warning("Evidence limitations: "+", ".join(p.replace("_", " ").capitalize() for p in state["evidence_penalties"]))
-
