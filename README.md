@@ -270,5 +270,7 @@ The deterministic safety layer would remain authoritative even after adding LLM-
 > Probabilistic reasoning may investigate and recommend. Deterministic policy decides whether the system may continue, must ask, or must stop.
 
 ---
+**Full write-up:** [`docs/PROJECT.md`](docs/PROJECT.md) · **Evaluation:** [`docs/EVALUATION.md`](docs/EVALUATION.md) · **🎥 Demo:** [Watch the 4:47 video](https://drive.google.com/file/d/1kLWKQ4cUpwQRsI1FGpRjoNpK_-M76IkC/view?usp=drive_link)
+
 
 Built by **Phanindra Nalam** as part of the **Mastering Agentic AI** certification program.
